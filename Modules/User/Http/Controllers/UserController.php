@@ -30,7 +30,7 @@ class UserController extends Controller
 
     public function api(Request $request)
     {
-       $user = User::where('email', $request->email)->first();
+       $user = User::where('api_token', $request->api_token)->first();
        $invoices = Invoice::where('user_id', $user->id)->get();
        return $invoices;
     }
@@ -38,16 +38,13 @@ class UserController extends Controller
     public function api_gen(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        if($user->api_token==$request->key){
-            return json_encode($user->envoices);
-        }else{
-            if(Hash::check($request->key, $user->password)){
-                if($user->api_token!=="" && $user->api_token !== null){
-                    return json_encode($user->api_token);
-                }else{
-                    $user->api_token = Str::random(60);
-                    return json_encode($user->api_token);
-                }
+        if(Hash::check($request->key, $user->password)){
+            if($user->api_token!=="" && $user->api_token !== null){
+                return ["api_token" => $user->api_token];
+            }else{
+                $user->api_token = Str::random(60);
+                $user->save();
+                return ["api_token" => $user->api_token];
             }
         }
     }
