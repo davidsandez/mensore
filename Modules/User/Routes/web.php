@@ -16,3 +16,4 @@ Route::prefix('home/user')->middleware('auth')->group(function() {
     Route::get('/', 'UserController@index')->name('user');
     Route::get('/datatable', 'UserController@datatable')->name('datatable-user');
 });
+

@@ -13,6 +13,7 @@ $factory->define(User::class, function (Faker $faker) {
         'phone'=> $faker->unique()->randomNumber($nbDigits = 8, $strict = true),
         'email'=> $faker->unique()->safeEmail,
         'password'=> bcrypt('mensore'),
+        'api_token' => Str::random(60),
         'remember_token' => Str::random(10)
     ];
 });

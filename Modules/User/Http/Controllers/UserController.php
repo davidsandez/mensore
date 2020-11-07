@@ -5,6 +5,9 @@ namespace Modules\User\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Modules\Invoice\Entities\Invoice;
 use Modules\User\Entities\User;
 
 use Yajra\DataTables\DataTables as DataTable;
@@ -23,6 +26,30 @@ class UserController extends Controller
     public function datatable()
     {
         return DataTable::of(User::query())->make(true);
+    }
+
+    public function api(Request $request)
+    {
+       $user = User::where('email', $request->email)->first();
+       $invoices = Invoice::where('user_id', $user->id)->get();
+       return $invoices;
+    }
+
+    public function api_gen(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if($user->api_token==$request->key){
+            return json_encode($user->envoices);
+        }else{
+            if(Hash::check($request->key, $user->password)){
+                if($user->api_token!=="" && $user->api_token !== null){
+                    return json_encode($user->api_token);
+                }else{
+                    $user->api_token = Str::random(60);
+                    return json_encode($user->api_token);
+                }
+            }
+        }
     }
 
     /**
