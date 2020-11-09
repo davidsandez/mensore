@@ -1,10 +1,5 @@
 @extends('layouts.app')
 
-@section('styles_')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="htps:////cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-@endsection
-
 @section('content')
 
 <div class="container-fluid">
@@ -41,10 +36,10 @@
                 "JQueryUI": true,
                 ajax: '{!! route('datatable-user') !!}',
                 columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'phone', name: 'phone'},
-                    {data: 'email', name: 'email'}
+                    {data: 'id'},
+                    {data: 'name'},
+                    {data: 'phone'},
+                    {data: 'email'}
                 ]
             });
        });

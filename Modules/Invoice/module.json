@@ -3,7 +3,7 @@
     "alias": "invoice",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "order": 99,
     "providers": [
         "Modules\\Invoice\\Providers\\InvoiceServiceProvider"
     ],

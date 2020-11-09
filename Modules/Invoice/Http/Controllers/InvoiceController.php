@@ -2,8 +2,6 @@
 
 namespace Modules\Invoice\Http\Controllers;
 
-use Modules\Invoice\Entities;
-
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,24 +19,6 @@ class InvoiceController extends Controller
         return view('invoice::index');
     }
 
-    public function datatable()
-    {
-        $id = \Auth::User()->id; //TODO
-        $result = Invoice::where("user_id", $id)->get();//TODO
-        //$result = $result[0];
-        return DataTable::of($result)
-            ->addColumn('edit', '<a href="{{ route(\'edit-invoice\', $id) }}" class="btn btn-info btn-sm">' . ('edit') . '</a>')
-            ->addColumn('delete', '<form action="{{ route(\'destroy-invoice\', $id) }}" method="post">
-            <input type="hidden" name="_method" value="delete">
-            <input type="submit" name="submit" value="'. ('delete').'" class="btn btn-danger btn-sm"
-            onClick="return confirm(\'¿Seguro de eliminar registro?\')">
-            {{ csrf_field() }}
-            </form>')
-            ->rawColumns(['edit', 'delete'])
-            ->toJson();//TODO
-    }
-
-
     /**
      * Show the form for creating a new resource.
      * @return Renderable
@@ -55,7 +35,14 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $invoice = new Invoice();
+        $invoice->invoice_number = $request->invoice_number;
+        $invoice->date = $request->date;
+        $invoice->total_price = $request->total_price;
+        $invoice->user_id = \Auth::User()->id;
+        $invoice->save();
+        return redirect('home/invoice');
+
     }
 
     /**
@@ -63,11 +50,11 @@ class InvoiceController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+/*     public function show($id)
     {
         return view('invoice::show');
     }
-
+ */
     /**
      * Show the form for editing the specified resource.
      * @param int $id
@@ -91,7 +78,7 @@ class InvoiceController extends Controller
         $invoice->invoice_number = $request->invoice_number;
         $invoice->date = $request->date;
         $invoice->total_price = $request->total_price;
-        $invoice->save();
+        $invoice->update();
         return redirect('home/invoice');
     }
 
@@ -105,5 +92,21 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('id', $id)->first();
         $invoice->delete();
         return redirect('home/invoice');
+    }
+
+    public function datatable()
+    {
+        $id = \Auth::User()->id;
+        $result = Invoice::where("user_id", $id)->get();
+        return DataTable::of($result)
+            ->addColumn('edit', '<a href="{{ route(\'edit-invoice\', $id) }}" class="btn btn-info btn-sm">' . ('edit') . '</a>')
+            ->addColumn('delete', '<form action="{{ route(\'destroy-invoice\', $id) }}" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <input type="submit" name="submit" value="'. ('delete').'" class="btn btn-danger btn-sm"
+            onClick="return confirm(\'¿Seguro de eliminar registro?\')">
+            {{ csrf_field() }}
+            </form>')
+            ->rawColumns(['edit', 'delete'])
+            ->toJson();
     }
 }

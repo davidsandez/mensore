@@ -14,6 +14,8 @@
 
 Route::prefix('home/invoice')->middleware('auth')->group(function() {
     Route::get('/', 'InvoiceController@index')->name('invoice');
+    Route::get('/create', 'InvoiceController@create')->name('create-invoice');
+    Route::post('/add', 'InvoiceController@store')->name('add-invoice');
     Route::get('/edit/{id}', 'InvoiceController@edit')->name('edit-invoice');
     Route::post('/update/{id}', 'InvoiceController@update')->name('update-invoice');
     Route::delete('/destroy/{id}', 'InvoiceController@destroy')->name('destroy-invoice');

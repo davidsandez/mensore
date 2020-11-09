@@ -3,8 +3,8 @@
 namespace Modules\Invoice\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Eloquent\Factory;
 
 use Modules\Invoice\Entities\Invoice as Invoice;
@@ -20,7 +20,6 @@ class InvoiceTableSeeder extends Seeder
     {
         Invoice::unguard();
         factory(Invoice::class, 500)->create();
-        //factory(Invoice::class, 50)->create();
         Invoice::reguard();
         // $this->call("OthersTableSeeder");Model::unguard();
     }
